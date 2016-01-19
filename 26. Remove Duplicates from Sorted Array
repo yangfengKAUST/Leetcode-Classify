@@ -6,6 +6,7 @@
 
 #How could I deal with it
 #As we know that it is a sorted array, so we can make a travel on this array directly.
+#And the time complexity is O(n)
 
 class Solution {
 public:
