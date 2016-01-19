@@ -1,0 +1,44 @@
+#https://leetcode.com/problems/median-of-two-sorted-arrays/
+
+#However, this problem is tricky because the requirment of the time complexity is O(lg(m+n))
+#So we need to use the varient of the binary search
+#before we do that, about four corners should be paid attention to
+
+#1). The simplest one may be that the k-th smallest element is in B rather than in A. When the entire array A has been traversed and no answer is returned, it means the k-th smallest element must be in B (if k is valid, i.e. 1 <= k <= m+n). We just need to run another "binary search" in B and this time the correct answer is guaranteed to be returned. 
+#2). i >= k. This means A[i] is greater than or equal to k elements in A and will be at least the (k+1)-th element in A+B. In this case, we need to "binary search" in the lower part of A. 
+#3). i + n < k - 1. Similarly to case 2), this means A[i] will be at most the (k-1)-th element in A+B. In this case, we need to "binary search
+4). At any time when we refer B[k - 1 - i - 1] and B[k - 1 - i], we should assure the indices are in range [0, n) to avoid out of array bounds error.
+
+#The code is as following:
+
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int m= nums1.size();
+        int n= nums2.size();
+        if((m+n)%2==1){
+            return helper(nums1, m, nums2, n, (m+n)/2+1, 0, m-1);
+        }
+        else
+        return (helper(nums1, m, nums2, n, (m+n)/2, 0, m-1)+helper(nums1, m, nums2, n, (m+n)/2+1, 0, m-1))/2;
+        
+    }
+    double helper(vector<int> &nums1, int m, vector<int>& nums2, int n, int k,int p, int q){
+        if(p>q){
+           return  helper(nums2, n, nums1, m, k, 0, n-1);
+        }
+        int i= (p+q)/2;
+        int j= k-i-2;
+        // || shows the unexisting things 
+        if((j<0 || (j<n && nums1[i]>= nums2[j])) && (j+1>=n || (j+1>=0 && nums1[i]<= nums2[j+1])))
+        return nums1[i];
+        else if(j>=n || (j>=0 && nums1[i]<nums2[j])){
+         return   helper(nums1, m, nums2, n, k, i+1, q);
+        }
+        else return helper(nums1, m, nums2, n, k, p, i-1);
+        
+       
+ 
+    }
+};
