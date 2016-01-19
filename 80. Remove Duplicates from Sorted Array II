@@ -1,0 +1,19 @@
+#https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
+
+#Analysis:
+#I use a flag to show the tail of the 'corrected' ones. Time complexity O(n)
+
+public class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums.length<= 2)
+        return nums.length;
+        int tail= 2;
+        for(int i=2; i< nums.length; i++){
+            if(nums[tail-2]!=nums[i]){
+                nums[tail]= nums[i];
+                tail++;
+            }
+        }
+        return tail;
+    }
+}
