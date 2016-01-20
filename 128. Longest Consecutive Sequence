@@ -1,0 +1,64 @@
+#https://leetcode.com/problems/longest-consecutive-sequence/
+
+# The tricky part here is that the time complexity should be O(n).
+# My idea is that use hash table to slove this problem
+# In the solution, I also use map.containsKey() and map.remove()
+# First, we can see the time complexity of containsKey()
+# public boolean containsKey(Object key) {
+  352           return getEntry(key) != null;
+  353       }
+  354   
+  355       /**
+  356        * Returns the entry associated with the specified key in the
+  357        * HashMap.  Returns null if the HashMap contains no mapping
+  358        * for the key.
+  359        */
+  360       final Entry<K,V> getEntry(Object key) {
+  361           int hash = (key == null) ? 0 : hash(key.hashCode());
+  362           for (Entry<K,V> e = table[indexFor(hash, table.length)];
+  363                e != null;
+  364                e = e.next) {
+  365               Object k;
+  366               if (e.hash == hash &&
+  367                   ((k = e.key) == key || (key != null && key.equals(k))))
+  368                   return e;
+  369           }
+  370           return null;
+  371       }
+  # Got from stackoverflow: http://stackoverflow.com/questions/8923251/what-is-the-time-complexity-of-hashmap-containskey-in-java
+  # As we can see, in general condition, the TC is O(1)
+  
+  # the codes are as following:
+  
+  public class Solution {
+    public int longestConsecutive(int[] nums) {
+        int length= nums.length;
+        if(length==0 || length==1)
+        return length;
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for(int i=0; i< length; i++){
+            map.put(nums[i],i);
+        }
+        int maxLength=0;
+        
+        for(int i=0; i<length; i++ ){
+            if(!map.containsKey(nums[i]))
+            continue;
+            int max=1;
+            int temp1= nums[i];
+            int temp2= nums[i];
+            while(map.containsKey(++temp1)){
+                max++;
+                map.remove(temp1);
+            }
+            while(map.containsKey(--temp2)){
+               max++;
+               map.remove(temp2);
+            }
+            map.remove(nums[i]);
+            if(max>maxLength)
+            maxLength= max;
+        }
+        return maxLength;
+    }
+}
