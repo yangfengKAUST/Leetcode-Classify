@@ -1,0 +1,2 @@
+For the problem 124, the idea is that max(left.single, right.single, left.single + right.single + root.val). The hints for divide and conquer
+is that, one tree can divided into left childern, right children and the root, while keeping all the properbilities unchanged.
